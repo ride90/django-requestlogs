@@ -12,7 +12,10 @@ logger = logging.getLogger('requestlogs')
 
 class JsonDumpField(serializers.Field):
     def to_representation(self, value):
-        return json.dumps(value, cls=JSONEncoder)
+        try:
+            return json.dumps(value, cls=JSONEncoder)
+        except (UnicodeDecodeError, Exception):
+            return json.dumps(str(value), cls=JSONEncoder)
 
 
 class BaseRequestSerializer(serializers.Serializer):
